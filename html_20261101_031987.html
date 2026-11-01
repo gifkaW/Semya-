@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Семья+ — ВТБ</title>
+<style>
+:root{--bg:#F1F3F6;--card:#fff;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--border2:#CBD5E1;--success:#15803D;--success-bg:#DCFCE7;--danger:#B91C1C;--radius:14px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);display:flex;justify-content:center;align-items:flex-start;padding:24px 16px;-webkit-font-smoothing:antialiased}
+.phone{--primary:#002882;--primary6:#1E40AF;--primary5:#3B82F6;--primary1:#DBE6FF;--primary50:#EFF4FF;width:100%;max-width:420px;height:calc(100vh - 48px);max-height:860px;background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,.04),0 12px 32px rgba(15,23,42,.08);display:flex;flex-direction:column;position:relative}
+.phone[data-theme="child"]{--primary:#9333EA;--primary6:#7C3AED;--primary5:#A855F7;--primary1:#F3E8FF;--primary50:#FAF5FF;--accent:#FF4F8B;--accent-bg:#FFE7F1;--bg:#FAF5FF}
+.phone[data-theme="child"] .balance-card{background:linear-gradient(135deg,#A855F7,#EC4899)}
+.phone[data-theme="child"] .insight-card{background:var(--accent-bg);border-color:var(--accent-bg)}
+.phone[data-theme="child"] .insight-card .title{color:var(--accent)}
+.phone[data-theme="child"] .insight-card .chip{color:var(--accent);border-color:#FFC7DC}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;z-index:20}
+.brand{display:flex;align-items:baseline;gap:6px;font-weight:700;letter-spacing:-.01em}
+.brand .vtb{font-size:18px;color:var(--primary);letter-spacing:.02em}
+.brand .sep{color:var(--muted);font-weight:400}
+.brand .fam{font-size:14px;font-weight:600}
+.top-actions{display:flex;gap:4px;align-items:center}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:0;cursor:pointer;background:transparent;color:var(--text2);display:grid;place-items:center;position:relative;transition:background .15s}
+.icon-btn:hover{background:var(--bg)}
+.icon-btn .dot{position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--danger);border:1.5px solid var(--card)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--primary50);color:var(--primary);display:grid;place-items:center;font-size:13px;font-weight:700;border:1px solid var(--border);margin-left:4px}
+.role-wrap{padding:12px 16px 4px;background:var(--card);flex-shrink:0}
+.segmented{display:flex;background:var(--bg);border-radius:10px;padding:3px;gap:2px}
+.segmented button{flex:1;border:0;background:transparent;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:.15s;font-family:inherit}
+.segmented button.active{background:var(--card);color:var(--primary);font-weight:600;box-shadow:0 1px 2px rgba(15,23,42,.08)}
+main{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.page-head{padding:4px 2px 6px}
+.page-head h1{margin:0;font-size:20px;letter-spacing:-.02em;font-weight:600}
+.page-head p{margin:4px 0 0;font-size:13px;color:var(--muted);line-height:1.4}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.card h2{margin:0 0 4px;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h2 .right{font-size:12px;font-weight:500;color:var(--muted)}
+.muted{color:var(--muted);font-size:12.5px;line-height:1.45;margin:4px 0 0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.balance-card{background:var(--primary);color:#fff;border:0;padding:18px}
+.balance-card .label{font-size:12px;opacity:.75;font-weight:500;letter-spacing:.02em}
+.balance-card .amount{font-size:30px;font-weight:600;letter-spacing:-.02em;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.balance-card .sub{display:flex;justify-content:space-between;font-size:12px;opacity:.85;font-variant-numeric:tabular-nums;margin-top:10px}
+.balance-card .progress{background:rgba(255,255,255,.15);margin:12px 0 8px}
+.balance-card .progress>div{background:rgba(255,255,255,.9)}
+.progress{width:100%;height:6px;background:var(--bg);border-radius:3px;overflow:hidden;margin:10px 0}
+.progress>div{height:100%;border-radius:3px;background:var(--primary5);transition:width .4s}
+.insight-card{background:var(--primary50);border-color:var(--primary1)}
+.insight-card .title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--primary);margin-bottom:6px}
+.insight-card p{margin:0;font-size:13px;line-height:1.5;color:var(--text2)}
+.insight-card .chip{display:inline-block;margin-top:10px;padding:5px 10px;background:var(--card);border:1px solid var(--primary1);border-radius:8px;font-size:12px;font-weight:500;color:var(--primary)}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11.5px;font-weight:500;background:var(--bg);color:var(--text2);white-space:nowrap}
+.pill.primary{background:var(--primary50);color:var(--primary)}
+.pill.success{background:var(--success-bg);color:var(--success)}
+.pill.muted{color:var(--muted)}
+.chart-row{display:grid;grid-template-columns:132px 1fr;gap:16px;align-items:center;margin-top:12px}
+.donut-wrap{position:relative;width:132px;height:132px}
+.donut-wrap svg{transform:rotate(-90deg);display:block}
+.donut-center{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none}
+.donut-center strong{font-size:15px;display:block;font-weight:600;font-variant-numeric:tabular-nums}
+.donut-center span{font-size:10.5px;color:var(--muted)}
+.legend{display:flex;flex-direction:column;gap:7px;font-size:12.5px}
+.legend .item{display:flex;align-items:center;gap:8px}
+.legend .swatch{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+.legend .name{flex:1;color:var(--text2)}
+.legend .val{font-weight:600;font-variant-numeric:tabular-nums;font-size:12px}
+.bars{display:flex;align-items:flex-end;gap:6px;height:100px;padding:8px 2px 0;margin-top:4px}
+.bars .bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end}
+.bars .bar .fill{width:100%;border-radius:4px 4px 2px 2px;background:var(--primary1);min-height:4px;transition:height .5s}
+.bars .bar.today .fill{background:var(--primary)}
+.bars .bar span{font-size:10.5px;color:var(--muted);font-weight:500}
+.bars .bar strong{font-size:10.5px;color:var(--text2);font-weight:600;font-variant-numeric:tabular-nums}
+.members{display:flex;flex-direction:column;margin-top:8px}
+.member{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--border)}
+.member:first-child{border-top:0;padding-top:4px}
+.member .av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:600;color:#fff}
+.member .av.p1{background:#002882}
+.member .av.p2{background:#0D9488}
+.member .av.p3{background:#3B82F6}
+.member .av.p4{background:#64748B}
+.member .info strong{display:block;font-size:13.5px;font-weight:500}
+.member .info span{font-size:11.5px;color:var(--muted);display:block;margin-top:2px}
+.member .info .progress{height:4px;margin:6px 0 4px}
+.member .amount{text-align:right;font-variant-numeric:tabular-nums}
+.member .amount strong{font-size:13px;font-weight:600;display:block}
+.member .amount span{font-size:11px;color:var(--muted);display:block;margin-top:2px}
+.goal{padding:14px;border:1px solid var(--border);border-radius:12px;margin-top:10px}
+.goal:first-of-type{margin-top:6px}
+.goal .head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.goal .head .ico{width:36px;height:36px;border-radius:9px;background:var(--primary50);color:var(--primary);display:grid;place-items:center;flex:0 0 auto}
+.goal .head .tb{flex:1;min-width:0}
+.goal .head h3{margin:0;font-size:14px;font-weight:600}
+.goal .head .dl{font-size:11.5px;color:var(--muted);margin-top:2px}
+.goal .head .pct{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--primary)}
+.goal .amts{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-top:8px;font-variant-numeric:tabular-nums}
+.goal .amts strong{color:var(--text);font-weight:600}
+.goal .actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn{border:0;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;font-family:inherit;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--primary);color:#fff}
+.btn.secondary{background:var(--bg);color:var(--text)}
+.btn.outline{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn.small{padding:7px 11px;font-size:12px;border-radius:8px}
+.btn-link{border:0;background:transparent;color:var(--primary);font-size:13px;font-weight:500;cursor:pointer;padding:4px 0;font-family:inherit}
+.mission{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:14px 0;border-top:1px solid var(--border)}
+.mission:first-of-type{border-top:0;padding-top:6px}
+.mission.done{opacity:.55}
+.mission .ico{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:var(--primary50);color:var(--primary);flex:0 0 auto}
+.mission.done .ico{background:var(--success-bg);color:var(--success)}
+.mission .body strong{display:block;font-size:13.5px;font-weight:500;line-height:1.3}
+.mission .body p{margin:3px 0 0;font-size:12px;color:var(--muted);line-height:1.4}
+.mission .body .meta{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.mission .reward{color:var(--success);font-weight:600;font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mission .action{grid-column:2/4;margin-top:4px}
+.filters{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin-top:8px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters button{border:1px solid var(--border);background:var(--card);color:var(--text2);padding:6px 12px;border-radius:8px;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;font-family:inherit}
+.filters button.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.txn{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--border)}
+.txn:first-of-type{border-top:0}
+.txn .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--bg);color:var(--text2)}
+.txn .info strong{display:block;font-size:13px;font-weight:500}
+.txn .info span{font-size:11.5px;color:var(--muted);display:block;margin-top:2px}
+.txn .info .note{color:var(--primary);font-style:italic;margin-top:4px;font-size:11.5px}
+.txn .amt{font-weight:600;font-size:13px;font-variant-numeric:tabular-nums}
+.txn .amt.neg{color:var(--text)}
+.txn .amt.pos{color:var(--success)}
+.feed{display:flex;flex-direction:column;margin-top:8px}
+.feed-item{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--border);font-size:12.5px}
+.feed-item:first-child{border-top:0;padding-top:4px}
+.feed-item .fi{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--primary50);color:var(--primary);flex:0 0 auto}
+.feed-item strong{display:block;font-weight:500;color:var(--text);line-height:1.4}
+.feed-item .time{color:var(--muted);font-size:11.5px;margin-top:2px;display:block}
+.setting{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid var(--border);gap:12px}
+.setting:first-of-type{border-top:0;padding-top:6px}
+.setting .info strong{display:block;font-size:13.5px;font-weight:500}
+.setting .info span{font-size:12px;color:var(--muted);margin-top:2px;display:block}
+.switch{position:relative;width:40px;height:24px;border-radius:12px;background:var(--border2);cursor:pointer;border:0;transition:background .2s;flex:0 0 auto}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--primary)}
+.switch.on::after{left:19px}
+.lbl{display:block;margin:10px 0 4px;font-size:12px;color:var(--text2);font-weight:500}
+input[type=text],input[type=number],select{width:100%;border:1px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;outline:none;background:var(--card);color:var(--text);font-family:inherit;font-variant-numeric:tabular-nums;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus{border-color:var(--primary5);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.inline-form{display:flex;gap:8px;margin-top:10px}
+.inline-form input{flex:1;min-width:0;width:auto}
+.search-wrap{position:relative;margin-top:10px}
+.search-wrap input{padding-left:36px;width:100%}
+.search-wrap .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;display:flex}
+.level-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:var(--primary50);margin-top:10px}
+.level-row .lvl{width:40px;height:40px;border-radius:10px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.level-row .info strong{display:block;font-size:13px;font-weight:600;color:var(--primary)}
+.level-row .info span{font-size:11.5px;color:var(--text2);display:block;margin-top:2px}
+.ach-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.ach{text-align:center;padding:10px 4px;border-radius:9px;background:var(--bg);font-size:10.5px;font-weight:500;color:var(--text2);line-height:1.2}
+.ach .icw{display:flex;justify-content:center;margin-bottom:4px;color:var(--primary)}
+.ach.locked{opacity:.45;color:var(--muted)}
+.ach.locked .icw{color:var(--muted)}
+.bottom-nav{background:var(--card);border-top:1px solid var(--border);padding:8px 6px 12px;display:grid;grid-template-columns:repeat(5,1fr);flex-shrink:0;z-index:15}
+.nav-btn{border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border-radius:8px;color:var(--muted);font-size:10.5px;font-weight:500;font-family:inherit;transition:color .15s}
+.nav-btn .ic{display:flex}
+.nav-btn.active{color:var(--primary)}
+.sheet{position:fixed;inset:0;background:rgba(15,23,42,.4);display:none;align-items:flex-end;justify-content:center;z-index:100}
+.sheet.open{display:flex}
+.sheet-inner{background:var(--card);width:100%;max-width:420px;border-radius:16px 16px 0 0;padding:16px 18px 24px;max-height:72vh;overflow-y:auto;animation:slideUp .25s}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 14px}
+.notif{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--border)}
+.notif:first-of-type{border-top:0;padding-top:4px}
+.notif .ni{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:var(--primary50);color:var(--primary);flex:0 0 auto}
+.notif strong{display:block;font-size:13px;font-weight:500}
+.notif p{margin:2px 0 0;font-size:12px;color:var(--muted);line-height:1.4}
+.celebrate{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:300;padding:30px;text-align:center;color:#fff}
+.celebrate.open{display:flex}
+.celebrate[data-theme="parent"]{background:linear-gradient(135deg,#002882,#1E40AF)}
+.celebrate[data-theme="child"]{background:linear-gradient(135deg,#A855F7,#EC4899)}
+.celebrate .em{font-size:100px;animation:pop .6s cubic-bezier(.34,1.56,.64,1)}
+.celebrate h1{font-size:30px;margin:16px 0 8px;font-weight:600;letter-spacing:-.02em}
+.celebrate p{font-size:15px;opacity:.9;margin:0 0 28px;line-height:1.4}
+.celebrate .btn{background:#fff;color:#0F172A;padding:12px 24px;font-size:14px}
+.celebrate .plane{font-size:64px;animation:fly 1.6s ease-in-out infinite;margin:8px 0 16px}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes fly{0%{transform:translate(-30px,20px) rotate(-12deg)}50%{transform:translate(30px,-20px) rotate(12deg)}100%{transform:translate(-30px,20px) rotate(-12deg)}}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(16px);background:#0F172A;color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:.25s;z-index:200;box-shadow:0 8px 24px rgba(15,23,42,.25)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;padding:24px 10px;color:var(--muted);font-size:13px}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tag{padding:5px 10px;border-radius:7px;font-size:11.5px;font-weight:500;background:var(--bg);color:var(--text2);border:1px solid var(--border)}
+@media(max-width:420px){body{padding:0}.phone{border-radius:0;height:100vh;max-height:none}}
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone" data-theme="parent">
+  <header class="topbar">
+    <div class="brand"><span class="vtb">ВТБ</span><span class="sep">·</span><span class="fam">Семья+</span></div>
+    <div class="top-actions">
+      <button class="icon-btn" id="btnSearch" aria-label="Поиск"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      <button class="icon-btn" id="btnNotif" aria-label="Уведомления"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="dot"></span></button>
+      <div class="avatar" id="topAvatar">М</div>
+    </div>
+  </header>
+  <div class="role-wrap"><div class="segmented" id="roleSwitch"></div></div>
+  <main id="app"></main>
+  <nav class="bottom-nav" id="bottomNav"></nav>
+</div>
+
+<div class="sheet" id="sheet"><div class="sheet-inner" id="sheetInner"></div></div>
+<div class="celebrate" id="celebrate"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const ic=(n,s=18)=>{const m={
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>',
+  target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+  card:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  trophy:'<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  trend:'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+  gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+  lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',
+  search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+  send:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>'
+};return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${m[n]||''}</svg>`};
+
+const state={
+  role:'parent',tab:'home',filter:'all',searchQuery:'',celebrated:new Set(),
+  family:[
+    {id:1,name:'Марат Квитковский',role:'parent',initial:'М',tag:'Отец',balance:85000},
+    {id:2,name:'Диана Квитковская',role:'parent',initial:'Д',tag:'Мать',balance:72000},
+    {id:3,name:'Карина',role:'teen',initial:'К',tag:'14 лет',balance:1250,limit:3000},
+    {id:4,name:'Лиана',role:'child',initial:'Л',tag:'9 лет',balance:480,limit:1500}
+  ],
+  budget:120000,spent:32100,
+  categories:[
+    {id:'food',name:'Продукты',amount:12400,color:'#002882'},
+    {id:'transport',name:'Транспорт',amount:6200,color:'#1E40AF'},
+    {id:'fun',name:'Развлечения',amount:4800,color:'#3B82F6'},
+    {id:'kids',name:'Дети',amount:3900,color:'#93C5FD'},
+    {id:'other',name:'Прочее',amount:4800,color:'#CBD5E1'}
+  ],
+  weekly:[8200,5100,9400,3800,6100,12400,4800],weekDays:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],
+  goals:[
+    {id:'vacation',title:'Отпуск в Сочи',icon:'plane',target:120000,current:54000,deadline:'Август 2026'},
+    {id:'bike',title:'Велосипед',icon:'target',target:25000,current:12000,deadline:'Июль 2026'},
+    {id:'phone',title:'Новый телефон',icon:'card',target:60000,current:8000,deadline:'Декабрь 2026'}
+  ],
+  missions:[
+    {id:1,title:'Неделя без импульсивных покупок',desc:'Откладывайте 100 ₽ вместо спонтанной покупки',reward:300,done:false,tag:'финансы'},
+    {id:2,title:'Первый вклад в цель',desc:'Внесите сумму в цель «Велосипед»',reward:200,done:true,tag:'цели'},
+    {id:3,title:'Разбор категорий',desc:'Изучите, на что ушли деньги за неделю',reward:150,done:false,tag:'аналитика'},
+    {id:4,title:'Урок: инфляция',desc:'Короткий урок и тест, 5 минут',reward:100,done:false,tag:'обучение'}
+  ],
+  transactions:[
+    {icon:'gift',title:'Люблю, на косметику',cat:'gift',amount:3000,who:'Марат → Диана',date:'Сегодня, 20:15',note:'Люблю, на косметику'},
+    {icon:'card',title:'Пятерочка',cat:'food',amount:-2340,who:'Марат',date:'Сегодня, 19:42'},
+    {icon:'gift',title:'Награда за миссию',cat:'gift',amount:300,who:'Карина',date:'Сегодня, 18:10'},
+    {icon:'card',title:'АЗС Лукойл',cat:'transport',amount:-4100,who:'Марат',date:'Сегодня, 12:05'},
+    {icon:'card',title:'Вкусно и точка',cat:'food',amount:-890,who:'Карина',date:'Вчера, 20:15'},
+    {icon:'card',title:'Игровой скин',cat:'game',amount:-250,who:'Лиана',date:'Вчера, 16:30'}
+  ],
+  activity:[
+    {icon:'gift',text:'Марат перевел Диане 3 000 ₽ — «на косметику»',time:'15 минут назад'},
+    {icon:'target',text:'Карина внесла 300 ₽ в цель «Велосипед»',time:'1 час назад'},
+    {icon:'check',text:'Лиана выполнила задание «Первый вклад»',time:'2 часа назад'},
+    {icon:'trend',text:'Аналитика: расходы в категории «Кафе» +12%',time:'Вчера'}
+  ],
+  notifications:[
+    {icon:'target',title:'Цель приближается',text:'«Велосипед» — 48%. Осталось 13 000 ₽.'},
+    {icon:'trend',title:'Аналитика расходов',text:'Сокращение категории «Кафе» на 10% ускорит цель «Отпуск».'},
+    {icon:'gift',title:'Личный перевод',text:'Вы отправили Диане 3 000 ₽ с запиской «на косметику».'},
+    {icon:'card',title:'Операция по карте',text:'Карина: 890 ₽ в «Вкусно и точка».'}
+  ],
+  settings:{pushMissions:true,pushTransactions:true,aiTips:true,parentalControl:true},
+  childLevel:3,childXP:220,childXPGoal:400,
+  childAchievements:[
+    {icon:'check',title:'Первая миссия',done:true},
+    {icon:'trend',title:'1 000 ₽',done:true},
+    {icon:'target',title:'Помощь цели',done:true},
+    {icon:'book',title:'5 уроков',done:false},
+    {icon:'star',title:'Серия 7 дней',done:false},
+    {icon:'trophy',title:'10 миссий',done:false},
+    {icon:'trend',title:'5 000 ₽',done:false},
+    {icon:'lock',title:'Уровень 5',done:false}
+  ]
+};
+
+const $=s=>document.querySelector(s);
+const app=$('#app'),roleSwitch=$('#roleSwitch'),bottomNav=$('#bottomNav'),sheet=$('#sheet'),sheetInner=$('#sheetInner'),toastEl=$('#toast');
+const money=v=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:0}).format(Math.round(v))+' ₽';
+const pct=(a,b)=>Math.min(100,Math.round(a/Math.max(b,1)*100));
+const teen=()=>state.family.find(m=>m.role==='teen');
+const marat=()=>state.family[0];
+function toast(m){toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>toastEl.classList.remove('show'),2200);}
+
+function renderRoleSwitch(){roleSwitch.innerHTML=`
+  <button data-role="parent" class="${state.role==='parent'?'active':''}">Родитель</button>
+  <button data-role="child" class="${state.role==='child'?'active':''}">Ребенок</button>`}
+
+const NAVP=[{id:'home',i:'home',l:'Главная'},{id:'family',i:'users',l:'Семья'},{id:'goals',i:'target',l:'Цели'},{id:'missions',i:'star',l:'Задания'},{id:'more',i:'more',l:'Еще'}];
+const NAVC=[{id:'home',i:'home',l:'Главная'},{id:'missions',i:'star',l:'Задания'},{id:'goals',i:'target',l:'Цели'},{id:'ach',i:'trophy',l:'Награды'},{id:'more',i:'more',l:'Еще'}];
+function renderNav(){const items=state.role==='parent'?NAVP:NAVC;bottomNav.innerHTML=items.map(it=>`
+  <button class="nav-btn ${state.tab===it.id?'active':''}" data-tab="${it.id}"><span class="ic">${ic(it.i,20)}</span><span>${it.l}</span></button>`).join('')}
+
+function parentHome(){
+  const free=state.budget-state.spent,sp=pct(state.spent,state.budget);
+  const totalCat=state.categories.reduce((s,c)=>s+c.amount,0);
+  const R=48,C=2*Math.PI*R,cx=60,cy=60;let acc=0;
+  const segs=state.categories.map(c=>{const part=c.amount/totalCat*C;const s=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${c.color}" stroke-width="14" stroke-dasharray="${part} ${C-part}" stroke-dashoffset="${-acc}"/>`;acc+=part;return s}).join('');
+  const maxW=Math.max(...state.weekly);
+  const today=new Date().getDay()===0?6:new Date().getDay()-1;
+  const bars=state.weekly.map((v,i)=>`<div class="bar ${i===today?'today':''}"><strong>${Math.round(v/1000)}к</strong><div class="fill" style="height:${Math.max(6,v/maxW*78)}%"></div><span>${state.weekDays[i]}</span></div>`).join('');
+  return `
+    <section class="page-head"><h1>Семья Квитковских</h1><p>Общий бюджет, карты и цели · июнь 2026</p></section>
+    <section class="card balance-card">
+      <div class="row"><span class="label">Семейный бюджет</span><span class="pill" style="background:rgba(255,255,255,.15);color:#fff;border:0">${sp}% использовано</span></div>
+      <div class="amount">${money(state.budget)}</div>
+      <div class="progress"><div style="width:${sp}%"></div></div>
+      <div class="sub"><span>Потрачено: ${money(state.spent)}</span><span>Свободно: ${money(free)}</span></div>
+    </section>
+    <section class="card">
+      <h2>Быстрые действия</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn primary small" data-action="new-goal">${ic('plus',14)} Добавить цель</button>
+        <button class="btn primary small" data-action="create-task">${ic('plus',14)} Создать задание</button>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Личные счета родителей</h2>
+      <div class="members">
+        ${state.family.filter(m=>m.role==='parent').map((m,i)=>`
+          <div class="member">
+            <div class="av p${i+1}">${m.initial}</div>
+            <div class="info"><strong>${m.name}</strong><span>${m.tag}</span></div>
+            <div class="amount"><strong>${money(m.balance)}</strong><span>личный</span></div>
+          </div>`).join('')}
+      </div>
+    </section>
+    <section class="card insight-card">
+      <div class="title">${ic('trend',15)} Аналитика расходов</div>
+      <p>Расходы в категории «Кафе» выросли на 12% за неделю. Сокращение на 10% ускорит достижение цели «Отпуск» примерно на две недели.</p>
+      <span class="chip">Рекомендация: лимит на развлечения</span>
+    </section>
+    <section class="card">
+      <h2>Расходы по категориям <span class="right">${money(totalCat)}</span></h2>
+      <div class="chart-row">
+        <div class="donut-wrap">
+          <svg viewBox="0 0 120 120" width="132" height="132"><circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#F1F3F6" stroke-width="14"/>${segs}</svg>
+          <div class="donut-center"><div><strong>${Math.round(totalCat/1000)} тыс.</strong><span>за месяц</span></div></div>
+        </div>
+        <div class="legend">${state.categories.map(c=>`<div class="item"><span class="swatch" style="background:${c.color}"></span><span class="name">${c.name}</span><span class="val">${Math.round(c.amount/1000)}к</span></div>`).join('')}</div>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Расходы за неделю <span class="right">${money(state.weekly.reduce((s,v)=>s+v,0))}</span></h2>
+      <div class="bars">${bars}</div>
+    </section>
+    <section class="card">
+      <h2>Участники <button class="btn-link" data-action="invite-member">Пригласить</button></h2>
+      <div class="members">
+        ${state.family.map((m,i)=>`
+          <div class="member">
+            <div class="av p${i+1}">${m.initial}</div>
+            <div class="info"><strong>${m.name}</strong><span>${m.tag}</span>
+              ${m.limit!==undefined?`<div class="progress"><div style="width:${pct(m.limit-m.balance,m.limit)}%"></div></div>`:''}
+            </div>
+            <div class="amount"><strong>${m.balance!==undefined?money(m.balance):'—'}</strong><span>${m.limit!==undefined?'из '+money(m.limit):(m.role==='parent'?'личный':'')}</span></div>
+          </div>`).join('')}
+      </div>
+    </section>
+    <section class="card">
+      <h2>Ближайшая цель <button class="btn-link" data-action="new-goal">Добавить</button></h2>
+      ${goalBlock(state.goals[0],'parent')}
+    </section>
+    <section class="card">
+      <h2>Задания <button class="btn-link" data-action="create-task">Создать</button></h2>
+      ${state.missions.slice(0,2).map(m=>missionBlock(m,'parent')).join('')}
+    </section>
+    <section class="card">
+      <h2>Лента семьи</h2>
+      <div class="feed">${state.activity.map(a=>`<div class="feed-item"><div class="fi">${ic(a.icon,15)}</div><div><strong>${a.text}</strong><span class="time">${a.time}</span></div></div>`).join('')}</div>
+    </section>`;
+}
+
+function goalBlock(g,role){
+  const p=pct(g.current,g.target),isC=role==='child';
+  return `<div class="goal">
+    <div class="head">
+      <div class="ico">${ic(g.icon,18)}</div>
+      <div class="tb"><h3>${g.title}</h3><div class="dl">до ${g.deadline}</div></div>
+      <div class="pct">${p}%</div>
+    </div>
+    <div class="progress"><div style="width:${p}%"></div></div>
+    <div class="amts"><span><strong>${money(g.current)}</strong> из ${money(g.target)}</span><span>осталось ${money(g.target-g.current)}</span></div>
+    <div class="actions">
+      <button class="btn secondary small" data-action="contribute-goal" data-goal-id="${g.id}" data-amount="${isC?100:5000}">${ic('plus',14)} ${isC?'100 ₽':'5 000 ₽'}</button>
+      ${isC?'':`<button class="btn outline small" data-action="custom-contribute" data-goal-id="${g.id}">Сумма</button>`}
+    </div>
+  </div>`;
+}
+
+function parentFamily(){
+  return `
+    <section class="page-head"><h1>Семья</h1><p>Счета родителей, детские карты, переводы</p></section>
+    <section class="card">
+      <h2>Перевести с личного счета <span class="right">${money(marat().balance)}</span></h2>
+      <p class="muted">Отправьте деньги супруге или ребенку с личной запиской. Семейный бюджет не затрагивается.</p>
+      <label class="lbl">Кому</label>
+      <select id="trTo">${state.family.filter(m=>m.id!==1).map(m=>`<option value="${m.id}">${m.name.split(' ')[0]} — ${m.role==='parent'?'супруга':'дочь'}</option>`).join('')}</select>
+      <label class="lbl">Сумма, ₽</label>
+      <input type="number" id="trAmt" value="3000" min="100" step="100"/>
+      <label class="lbl">Записка</label>
+      <input type="text" id="trNote" placeholder="Например, люблю, на косметику"/>
+      <button class="btn primary" style="margin-top:12px;width:100%;justify-content:center" data-action="send-money">${ic('send',15)} Отправить</button>
+    </section>
+    <section class="card">
+      <h2>Детские карты</h2>
+      ${state.family.filter(m=>m.role!=='parent').map((m,i)=>`
+        <div class="goal">
+          <div class="head">
+            <div class="av p${i+3}" style="width:36px;height:36px;border-radius:9px">${m.initial}</div>
+            <div class="tb"><h3>${m.name}</h3><div class="dl">${m.tag}</div></div>
+            <span class="pill success">активна</span>
+          </div>
+          <div class="progress"><div style="width:${pct(m.limit-m.balance,m.limit)}%"></div></div>
+          <div class="amts"><span>Баланс: <strong>${money(m.balance)}</strong></span><span>Лимит: ${money(m.limit)}</span></div>
+          <div class="inline-form">
+            <input type="number" min="0" step="100" value="${m.limit}" data-limit-input="${m.id}"/>
+            <button class="btn primary small" data-action="save-limit" data-member-id="${m.id}">Сохранить</button>
+          </div>
+          <div class="actions">
+            <button class="btn secondary small" data-action="topup-card" data-member-id="${m.id}">${ic('plus',14)} 500 ₽</button>
+            <button class="btn outline small" data-action="block-card" data-member-id="${m.id}">${ic('lock',14)} Заморозить</button>
+          </div>
+        </div>`).join('')}
+    </section>
+    <section class="card">
+      <h2>Участники <button class="btn-link" data-action="invite-member">Пригласить</button></h2>
+      <div class="members">
+        ${state.family.map((m,i)=>`
+          <div class="member">
+            <div class="av p${i+1}">${m.initial}</div>
+            <div class="info"><strong>${m.name}</strong><span>${m.tag}</span></div>
+            <span class="pill ${m.role==='parent'?'primary':m.role==='teen'?'':'muted'}">${m.role==='parent'?(m.id===1?'отец':'мать'):m.role==='teen'?'подросток':'ребенок'}</span>
+          </div>`).join('')}
+      </div>
+    </section>
+    <section class="card">
+      <h2>Приватность</h2>
+      ${setting('Родительский контроль','Проверка операций ребенка','parentalControl')}
+      ${setting('Push по операциям','Уведомления о тратах','pushTransactions')}
+      ${setting('Аналитика','Советы по бюджету','aiTips')}
+    </section>`;
+}
+function setting(t,d,k){return `<div class="setting"><div class="info"><strong>${t}</strong><span>${d}</span></div><button class="switch ${state.settings[k]?'on':''}" data-toggle="${k}"></button></div>`}
+
+function parentGoals(){
+  return `
+    <section class="page-head"><h1>Семейные цели</h1><p>Совместные накопления и автоплатежи</p></section>
+    <section class="card">
+      <h2>Все цели <button class="btn primary small" data-action="new-goal">${ic('plus',14)} Добавить</button></h2>
+      ${state.goals.map(g=>goalBlock(g,'parent')).join('')}
+    </section>
+    <section class="card insight-card">
+      <div class="title">${ic('trend',15)} План накоплений</div>
+      <p>Чтобы закрыть «Отпуск» к августу, ежемесячный взнос — около 11 000 ₽. Рекомендуем автоплатеж 5-го числа.</p>
+      <button class="btn primary small" style="margin-top:10px" data-action="auto-save">Включить автоплатеж</button>
+    </section>`;
+}
+function parentMissions(){
+  const done=state.missions.filter(m=>m.done).length;
+  return `
+    <section class="page-head"><h1>Задания</h1><p>Создавайте задания и отслеживайте прогресс</p></section>
+    <section class="card">
+      <h2>Активные <button class="btn primary small" data-action="create-task">${ic('plus',14)} Создать</button></h2>
+      ${state.missions.map(m=>missionBlock(m,'parent')).join('')}
+    </section>
+    <section class="card">
+      <h2>Прогресс ребенка <span class="right">${done}/${state.missions.length}</span></h2>
+      <div class="progress"><div style="width:${pct(done,state.missions.length)}%"></div></div>
+      <p class="muted">Карина выполнила ${done} задание на этой неделе.</p>
+    </section>`;
+}
+function missionBlock(m,role){
+  const canDo=role==='child'&&!m.done;
+  return `<div class="mission ${m.done?'done':''}">
+    <div class="ico">${m.done?ic('check',18):ic('star',18)}</div>
+    <div class="body">
+      <strong>${m.title}</strong><p>${m.desc}</p>
+      <div class="meta"><span class="pill">${m.tag}</span>${m.done?'<span class="pill success">выполнено</span>':''}</div>
+    </div>
+    <div class="reward">+${money(m.reward)}</div>
+    ${canDo?`<button class="btn primary small action" data-action="complete-mission" data-mission-id="${m.id}">Выполнить</button>`:''}
+  </div>`;
+}
+function parentMore(){
+  const q=state.searchQuery.toLowerCase(),f=state.filter;
+  const list=state.transactions.filter(t=>{const mq=!q||t.title.toLowerCase().includes(q)||t.who.toLowerCase().includes(q);return mq&&(f==='all'||t.cat===f)});
+  return `
+    <section class="page-head"><h1>Еще</h1><p>История операций и настройки</p></section>
+    <section class="card">
+      <h2>Операции</h2>
+      <div class="search-wrap"><span class="ic">${ic('search',16)}</span><input type="text" placeholder="Поиск по операциям" value="${state.searchQuery}" data-search/></div>
+      <div class="filters">${[['all','Все'],['food','Продукты'],['transport','Транспорт'],['gift','Переводы'],['game','Игры']].map(([id,l])=>`<button class="${f===id?'active':''}" data-filter="${id}">${l}</button>`).join('')}</div>
+      ${list.length===0?'<div class="empty">Ничего не найдено</div>':list.map(t=>`
+        <div class="txn">
+          <div class="ic">${ic(t.icon,16)}</div>
+          <div class="info"><strong>${t.title}</strong><span>${t.who} · ${t.date}</span>${t.note?`<div class="note">«${t.note}»</div>`:''}</div>
+          <div class="amt ${t.amount<0?'neg':'pos'}">${t.amount>0?'+':''}${money(t.amount)}</div>
+        </div>`).join('')}
+    </section>
+    <section class="card">
+      <h2>Настройки</h2>
+      ${setting('Push-уведомления','О заданиях и тратах','pushMissions')}
+      ${setting('Аналитические советы','Рекомендации по бюджету','aiTips')}
+      ${setting('Родительский контроль','Операции детей','parentalControl')}
+    </section>
+    <section class="card">
+      <h2>О сервисе</h2>
+      <p class="muted">«Семья+» — встроенный модуль ВТБ Онлайн для совместного управления семейным бюджетом и развития финансовой грамотности детей.</p>
+      <div class="tag-row"><span class="tag">ML on-prem</span><span class="tag">anti-fraud</span><span class="tag">152-ФЗ</span><span class="tag">115-ФЗ</span></div>
+    </section>`;
+}
+
+function childHome(){
+  const t=teen(),p=pct(state.childXP,state.childXPGoal);
+  const done=state.missions.filter(m=>m.done).length;
+  const gifts=state.transactions.filter(x=>x.cat==='gift'&&x.who.includes('Карина')&&x.note);
+  return `
+    <section class="page-head"><h1>Здравствуйте, ${t.name.split(' ')[0]}</h1><p>Ваши задания, накопления и прогресс</p></section>
+    <section class="card balance-card">
+      <div class="row"><span class="label">Моя карта · Семья+</span><span class="pill" style="background:rgba(255,255,255,.15);color:#fff;border:0">активна</span></div>
+      <div class="amount">${money(t.balance)}</div>
+      <div class="sub"><span>Лимит: ${money(t.limit)}</span><span>Доступно: ${money(t.balance)}</span></div>
+    </section>
+    ${gifts.length?`<section class="card insight-card"><div class="title">${ic('gift',15)} Подарок от папы</div><p>«${gifts[0].note}» — ${money(gifts[0].amount)}</p></section>`:''}
+    <section class="card">
+      <h2>Прогресс <span class="right">${state.childXP}/${state.childXPGoal} XP</span></h2>
+      <div class="progress"><div style="width:${p}%"></div></div>
+      <div class="level-row"><div class="lvl">${state.childLevel}</div><div class="info"><strong>Уровень ${state.childLevel}</strong><span>До уровня ${state.childLevel+1}: ${state.childXPGoal-state.childXP} XP</span></div></div>
+    </section>
+    <section class="card">
+      <h2>Задания <button class="btn-link" data-tab="missions">Все</button></h2>
+      ${state.missions.slice(0,2).map(m=>missionBlock(m,'child')).join('')}
+    </section>
+    <section class="card">
+      <h2>Цели <button class="btn-link" data-tab="goals">Все</button></h2>
+      ${goalBlock(state.goals[1],'child')}
+    </section>
+    <section class="card">
+      <h2>Награды</h2>
+      <div class="ach-grid">${state.childAchievements.slice(0,4).map(a=>`<div class="ach ${a.done?'':'locked'}"><div class="icw">${ic(a.icon,18)}</div>${a.title}</div>`).join('')}</div>
+    </section>`;
+}
+function childMissions(){
+  return `
+    <section class="page-head"><h1>Задания</h1><p>Выполняйте и получайте награды на карту</p></section>
+    <section class="card">
+      <h2>Активные <span class="right">${state.missions.filter(m=>!m.done).length} осталось</span></h2>
+      ${state.missions.map(m=>missionBlock(m,'child')).join('')}
+    </section>
+    <section class="card">
+      <h2>Награды</h2>
+      <div class="ach-grid">${state.childAchievements.map(a=>`<div class="ach ${a.done?'':'locked'}"><div class="icw">${ic(a.icon,18)}</div>${a.title}</div>`).join('')}</div>
+    </section>`;
+}
+function childGoals(){
+  return `
+    <section class="page-head"><h1>Мои цели</h1><p>Копите вместе с семьей</p></section>
+    <section class="card">
+      <h2>Семейные цели</h2>
+      ${state.goals.map(g=>goalBlock(g,'child')).join('')}
+    </section>
+    <section class="card insight-card">
+      <div class="title">${ic('trend',15)} Как копить быстрее</div>
+      <p>Откладывайте по 100 ₽ с каждой карманной суммы. Награды за задания зачисляются на карту — часть можно сразу направить в цель.</p>
+    </section>`;
+}
+function childAch(){
+  return `
+    <section class="page-head"><h1>Награды</h1><p>Открывайте новые бейджи</p></section>
+    <section class="card">
+      <h2>Все бейджи</h2>
+      <div class="ach-grid">${state.childAchievements.map(a=>`<div class="ach ${a.done?'':'locked'}" style="padding:14px 6px"><div class="icw">${ic(a.icon,22)}</div><div style="font-size:11px;line-height:1.25">${a.title}</div></div>`).join('')}</div>
+    </section>
+    <section class="card">
+      <h2>Прогресс <span class="right">${state.childXP}/${state.childXPGoal} XP</span></h2>
+      <div class="progress"><div style="width:${pct(state.childXP,state.childXPGoal)}%"></div></div>
+      <p class="muted">Бейдж «Серия 7 дней» открывается за 7 дней подряд с выполненным заданием.</p>
+    </section>`;
+}
+function childMore(){
+  const mine=state.transactions.filter(t=>t.cat==='gift'||t.who.includes('Карина'));
+  return `
+    <section class="page-head"><h1>Еще</h1><p>История и обучение</p></section>
+    <section class="card">
+      <h2>История</h2>
+      ${mine.map(t=>`
+        <div class="txn">
+          <div class="ic">${ic(t.icon,16)}</div>
+          <div class="info"><strong>${t.title}</strong><span>${t.who} · ${t.date}</span>${t.note?`<div class="note">«${t.note}»</div>`:''}</div>
+          <div class="amt ${t.amount<0?'neg':'pos'}">${t.amount>0?'+':''}${money(t.amount)}</div>
+        </div>`).join('')}
+    </section>
+    <section class="card">
+      <h2>Финансовая грамотность</h2>
+      <p class="muted">Короткие уроки по 5 минут. Учитесь на практике.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+        <button class="btn secondary small" style="justify-content:flex-start" data-action="lesson" data-name="Что такое инфляция">${ic('book',15)} Что такое инфляция</button>
+        <button class="btn secondary small" style="justify-content:flex-start" data-action="lesson" data-name="Зачем нужен бюджет">${ic('book',15)} Зачем нужен бюджет</button>
+        <button class="btn secondary small" style="justify-content:flex-start" data-action="lesson" data-name="Как работают накопления">${ic('book',15)} Как работают накопления</button>
+      </div>
+    </section>`;
+}
+
+function render(){
+  document.getElementById('phone').dataset.theme=state.role;
+  renderRoleSwitch();renderNav();
+  if(state.role==='parent'){
+    app.innerHTML=state.tab==='home'?parentHome():state.tab==='family'?parentFamily():state.tab==='goals'?parentGoals():state.tab==='missions'?parentMissions():parentMore();
+    $('#topAvatar').textContent='М';
+  }else{
+    app.innerHTML=state.tab==='home'?childHome():state.tab==='missions'?childMissions():state.tab==='goals'?childGoals():state.tab==='ach'?childAch():childMore();
+    $('#topAvatar').textContent=teen().initial;
+  }
+}
+
+function celebrateGoal(g){
+  const isV=g.id==='vacation',el=document.getElementById('celebrate');
+  el.dataset.theme='parent';
+  el.innerHTML=`<div class="em">${isV?'✈️':'🎉'}</div><h1>${isV?'Летите в Сочи!':'Цель достигнута!'}</h1><p>«${g.title}» — ${money(g.target)} накоплено</p>${isV?'<div class="plane">✈️</div>':''}<button class="btn" data-close>Отлично</button>`;
+  el.classList.add('open');
+}
+function celebrateMission(m){
+  const el=document.getElementById('celebrate');
+  el.dataset.theme='child';
+  el.innerHTML=`<div class="em">🎉</div><h1>Молодец!</h1><p>Задание «${m.title}» выполнено<br/>+${money(m.reward)} на карту</p><button class="btn" data-close>Спасибо!</button>`;
+  el.classList.add('open');
+}
+
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-close]')){document.getElementById('celebrate').classList.remove('open');return}
+  const rb=e.target.closest('[data-role]');if(rb){state.role=rb.dataset.role;state.tab='home';render();return}
+  const tb=e.target.closest('[data-tab]');if(tb){state.tab=tb.dataset.tab;render();return}
+  const fb=e.target.closest('[data-filter]');if(fb){state.filter=fb.dataset.filter;render();return}
+  const tg=e.target.closest('[data-toggle]');if(tg){const k=tg.dataset.toggle;state.settings[k]=!state.settings[k];tg.classList.toggle('on');return}
+  const a=e.target.closest('[data-action]');if(!a) return;
+  const act=a.dataset.action;
+
+  if(act==='complete-mission'){
+    const id=+a.dataset.missionId,m=state.missions.find(x=>x.id===id);
+    if(!m||m.done) return;
+    m.done=true;const t=teen();t.balance+=m.reward;state.childXP+=25;
+    if(state.childXP>=state.childXPGoal){state.childLevel++;state.childXP-=state.childXPGoal}
+    state.transactions.unshift({icon:'gift',title:`Награда: ${m.title}`,cat:'gift',amount:m.reward,who:t.name.split(' ')[0],date:'Только что'});
+    state.activity.unshift({icon:'check',text:`${t.name.split(' ')[0]} выполнил(а) «${m.title}»`,time:'Только что'});
+    render();setTimeout(()=>celebrateMission(m),300);
+  }
+  else if(act==='contribute-goal'||act==='custom-contribute'){
+    const g=state.goals.find(x=>x.id===a.dataset.goalId);if(!g) return;
+    let amt=+a.dataset.amount||0;
+    if(act==='custom-contribute'){amt=Number(prompt('Сумма, ₽:','1000'));if(!amt||amt<=0) return}
+    if(state.role==='parent'){if(state.budget<amt){toast('Недостаточно средств');return}state.budget-=amt}
+    else{const t=teen();if(t.balance<amt){toast('Недостаточно средств');return}t.balance-=amt}
+    g.current=Math.min(g.target,g.current+amt);
+    toast(`+${money(amt)} в «${g.title}»`);
+    if(g.current>=g.target&&!state.celebrated.has(g.id)){state.celebrated.add(g.id);setTimeout(()=>celebrateGoal(g),400)}
+    render();
+  }
+  else if(act==='send-money'){
+    const from=marat(),to=state.family.find(m=>m.id===+document.getElementById('trTo').value);
+    const amt=+document.getElementById('trAmt').value,note=document.getElementById('trNote').value.trim();
+    if(!amt||amt<=0) return toast('Введите сумму');
+    if(from.balance<amt) return toast('Недостаточно средств');
+    from.balance-=amt;to.balance+=amt;
+    state.transactions.unshift({icon:'gift',title:note||'Личный перевод',cat:'gift',amount:-amt,who:`Марат → ${to.name.split(' ')[0]}`,date:'Только что',note:note||''});
+    state.activity.unshift({icon:'gift',text:`Марат перевел ${to.name.split(' ')[0]} ${money(amt)}${note?` — «${note}»`:''}`,time:'Только что'});
+    toast(`Переведено ${money(amt)} → ${to.name.split(' ')[0]}`);render();
+  }
+  else if(act==='create-task'){
+    const title=prompt('Название задания:');if(!title) return;
+    const desc=prompt('Описание (необязательно):')||'Задание от родителя';
+    const reward=Number(prompt('Награда, ₽:','100'));
+    if(!reward||reward<=0) return;
+    state.missions.push({id:Date.now(),title,desc,reward,done:false,tag:'задание'});
+    toast('Задание создано');render();
+  }
+  else if(act==='new-goal'){
+    const title=prompt('Название цели:');if(!title) return;
+    const target=Number(prompt('Сумма, ₽:','50000'));
+    if(!target||target<=0) return;
+    const icon=(prompt('Иконка (plane/bike/phone/card/target):','target')||'target').trim();
+    state.goals.push({id:'g'+Date.now(),title,icon,target,current:0,deadline:'2026'});
+    toast('Цель создана');render();
+  }
+  else if(act==='save-limit'){
+    const mid=+a.dataset.memberId,inp=document.querySelector(`[data-limit-input="${mid}"]`),v=Number(inp.value);
+    if(!Number.isFinite(v)||v<0) return;
+    state.family.find(x=>x.id===mid).limit=v;toast('Лимит обновлен');render();
+  }
+  else if(act==='topup-card'){
+    const from=marat(),m=state.family.find(x=>x.id===+a.dataset.memberId);
+    if(from.balance<500) return toast('Недостаточно средств');
+    from.balance-=500;m.balance+=500;
+    state.transactions.unshift({icon:'card',title:'Пополнение карты',cat:'gift',amount:-500,who:`Марат → ${m.name.split(' ')[0]}`,date:'Только что'});
+    toast('+500 ₽ на карту');render();
+  }
+  else if(act==='block-card'){const m=state.family.find(x=>x.id===+a.dataset.memberId);toast(`Карта ${m.name.split(' ')[0]} заморожена`)}
+  else if(act==='invite-member'){
+    const name=prompt('Имя участника:');if(!name) return;
+    state.family.push({id:Date.now(),name,role:'child',initial:name[0].toUpperCase(),balance:0,limit:1000,tag:'Новый участник'});
+    toast('Участник добавлен');render();
+  }
+  else if(act==='auto-save') toast('Автоплатеж включен: 11 000 ₽ / мес');
+  else if(act==='lesson') toast(`Открыт урок: ${a.dataset.name}`);
+});
+
+document.addEventListener('input',e=>{
+  if(e.target.matches('[data-search]')){
+    state.searchQuery=e.target.value;render();
+    const inp=document.querySelector('[data-search]');
+    if(inp){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)}
+  }
+});
+
+$('#btnNotif').addEventListener('click',()=>{
+  sheetInner.innerHTML=`<div class="sheet-handle"></div><h2 style="margin:0 0 8px;font-size:16px;font-weight:600">Уведомления</h2>
+    ${state.notifications.map(n=>`<div class="notif"><div class="ni">${ic(n.icon,15)}</div><div><strong>${n.title}</strong><p>${n.text}</p></div></div>`).join('')}`;
+  sheet.classList.add('open');
+});
+sheet.addEventListener('click',e=>{if(e.target===sheet) sheet.classList.remove('open')});
+$('#btnSearch').addEventListener('click',()=>{state.role='parent';state.tab='more';render();setTimeout(()=>{const i=document.querySelector('[data-search]');if(i) i.focus()},80)});
+
+render();
+</script>
+</body>
+</html>
